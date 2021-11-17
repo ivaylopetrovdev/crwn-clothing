@@ -1,40 +1,43 @@
 import React, { useState } from 'react';
-import { connect } from "react-redux";
+import { connect } from 'react-redux';
 
 import FormInput from '../form-input/form-input.component';
 import CustomButton from '../custom-button/custom-button.component';
 
-import { signUpStart } from "../../redux/user/user.actions";
+import { signUpStart } from '../../redux/user/user.actions';
 
-import './sign-up.styles.scss';
+import { SignUpContainer, SignUpTitle } from './sign-up.styles';
 
 const SignUp = ({ signUpStart }) => {
-    const [userCredentials, setUserCredentials] = useState({ displayName: '', email: '', password: '', confirmPassword: '' });
+    const [userCredentials, setUserCredentials] = useState({
+        displayName: '',
+        email: '',
+        password: '',
+        confirmPassword: ''
+    });
 
     const { displayName, email, password, confirmPassword } = userCredentials;
-    const handleSubmit = async (event) => {
+
+    const handleSubmit = async event => {
         event.preventDefault();
 
         if (password !== confirmPassword) {
-            alert('passwords don\'t match');
+            alert("passwords don't match");
             return;
         }
 
-        return signUpStart({ displayName, email, password })
-    }
+        signUpStart({ displayName, email, password });
+    };
 
-    const handleChange = (event) => {
+    const handleChange = event => {
         const { name, value } = event.target;
 
-        setUserCredentials({
-            ...userCredentials,
-            [name]: value
-        })
-    }
+        setUserCredentials({ ...userCredentials, [name]: value });
+    };
 
-    return(
-        <div className='sign-up'>
-            <h2 className='title'>I do not have an account</h2>
+    return (
+        <SignUpContainer>
+            <SignUpTitle>I do not have a account</SignUpTitle>
             <span>Sign up with your email and password</span>
             <form className='sign-up-form' onSubmit={handleSubmit}>
                 <FormInput
@@ -71,12 +74,15 @@ const SignUp = ({ signUpStart }) => {
                 />
                 <CustomButton type='submit'>SIGN UP</CustomButton>
             </form>
-        </div>
+        </SignUpContainer>
     );
-}
+};
 
-const mapDispatchToProps = (dispatch) => ({
-    signUpStart: (userCredentials) => dispatch(signUpStart(userCredentials))
-})
+const mapDispatchToProps = dispatch => ({
+    signUpStart: userCredentials => dispatch(signUpStart(userCredentials))
+});
 
-export default connect(null, mapDispatchToProps)(SignUp);
+export default connect(
+    null,
+    mapDispatchToProps
+)(SignUp);
